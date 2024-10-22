@@ -12,6 +12,12 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "app/pages/ReminderAdd.tsx",
+    "app/pages/NoteDetail.tsx",
+    "app/pages/NoteAdd.tsx",
+    "app/Boot.tsx",
+    "app/Main.tsx",
+    "app/Splash.tsx"
   ]
 }
