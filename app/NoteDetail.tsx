@@ -102,7 +102,7 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
           <View className='w-full h-full mb-20'>
             <View className=''>
               <TextInput
-                className={`w-full h-auto p-1 font-bold text-[25px] 
+                className={`w-full h-auto p-1 font-bold text-[35px] 
                 ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' 
                 : 'text-black  border-b border-slate-100 focus:border-slate-700'}`}
                 placeholder='Title'
@@ -122,7 +122,7 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
               }}>
                 <View style={{ flex: 1 }} className='w-screen'>
                   <TextInput
-                    className={`w-full h-auto p-1 font-regular text-[15px] rounded-lg
+                    className={`w-full h-auto p-1 font-regular text-[25px] rounded-lg
                     ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' : 
                     'text-black border border-slate-100 '}`}
                     placeholderTextColor={isNight ? '#D3D7FF' : 'gray'}

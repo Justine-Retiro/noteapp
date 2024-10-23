@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, Platform } from 'react-native';
+import { View, Text, TextInput, ScrollView, Platform, Pressable } from 'react-native';
 import React, { useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import HeadingAdd from '../components/HeadingAdd';
@@ -83,7 +83,7 @@ export const NoteAdd = ({ navigation }: { navigation: any }) => {
           <View className='w-full h-auto mb-10'>
             <View className=''>
               <TextInput
-                className={`w-full h-[45px] py-1 px-1 font-bold text-[25px] 
+                className={`w-full h-[45px] py-1 px-1 font-bold text-[35px] 
                 ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' 
                 : 'text-black  border-b border-slate-100 focus:border-slate-700'}`}
                 placeholder='Title'
@@ -95,18 +95,27 @@ export const NoteAdd = ({ navigation }: { navigation: any }) => {
               />
             </View>
             <View className='mb-5 h-screen flex items-baseline'>
-              <TextInput
-                className={`w-full h-auto p-1 font-regular text-[15px] rounded-lg 
-                ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' : 
-                'text-black border border-slate-100 focus:border-transparent'}`}
-                placeholder='Note'
-                placeholderTextColor={isNight ? '#D3D7FF' : 'gray'}
-                value={description}
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={handleDescriptionChange}
-                ref={noteInputRef}
-              />
+            <Pressable style={{ flex: 1 }} onPress={() => {
+                console.log('Pressable pressed');
+                if (noteInputRef.current) {
+                  noteInputRef.current.focus();
+                }
+              }}> 
+               <View style={{ flex: 1 }} className='w-screen'>
+                  <TextInput
+                    className={`w-full h-auto p-1 font-regular text-[25px] rounded-lg 
+                    ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' : 
+                    'text-black border border-slate-100 focus:border-transparent'}`}
+                    placeholder='Note'
+                    placeholderTextColor={isNight ? '#D3D7FF' : 'gray'}
+                    value={description}
+                    multiline={true}
+                    numberOfLines={4}
+                    onChangeText={handleDescriptionChange}
+                    ref={noteInputRef}
+                  />
+                </View>
+              </Pressable>
             </View>
           </View>
         </View>
