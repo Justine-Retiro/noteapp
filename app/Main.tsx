@@ -13,6 +13,7 @@ import NoteCards from '../components/NoteCards';
 import ReminderTabs from '../components/ReminderTabs';
 import { ButtonMain } from '../components/ButtonMain';
 import CustomRepeatModal from '../components/CustomRepeatModal';
+import { router } from 'expo-router';
 
 export const Main = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -86,7 +87,7 @@ export const Main = () => {
   };
 
   const handleNotePress = (id: string) => {
-    navigation.navigate('NoteDetail', { id });
+    router.push(`/NoteDetail/${id}`);
   };
 
   const onRefresh = useCallback(async () => {
@@ -105,9 +106,9 @@ export const Main = () => {
 
   const handleAddNavigation = () => {
     if(selectedFilter === 'Notes') {
-      navigation.navigate('NoteAdd');
+      router.push('/NoteAdd');  // Use forward slash before route name
     } else {
-      navigation.navigate('ReminderAdd');
+      router.push('/ReminderAdd');
     }
   } 
 

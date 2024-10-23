@@ -1,13 +1,13 @@
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import React, { useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import HeadingAdd from '../../components/HeadingAdd';
-import ButtonSort from '../../components/ButtonSort';
+import HeadingAdd from '../components/HeadingAdd';
+import ButtonSort from '../components/ButtonSort';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Calendar } from 'react-native-calendars';
 import { format, parse } from 'date-fns';
 import * as Notifications from 'expo-notifications';
-import { addReminder } from '../utils/userDataManager';
+import { addReminder } from './utils/userDataManager';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 
@@ -21,7 +21,7 @@ export const ReminderAdd = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const navigation = useNavigation();
 
-  const minutesInputRef = useRef(null);
+  const minutesInputRef = useRef<TextInput>(null);
 
   const handleInputChangeHours = (text: string) => {
     if (text === '') {
@@ -81,25 +81,25 @@ export const ReminderAdd = () => {
       [selectedDate]: { selected: true, selectedColor: '#8E97FD' },
     };
 
-    const addDays = (date, days) => {
+    const addDays = (date: Date, days: number) => {
       const result = new Date(date);
       result.setDate(result.getDate() + days);
       return result;
     };
 
-    const addMonths = (date, months) => {
+    const addMonths = (date: Date, months: number) => {
       const result = new Date(date);
       result.setMonth(result.getMonth() + months);
       return result;
     };
 
-    const addYears = (date, years) => {
+    const addYears = (date: Date, years: number) => {
       const result = new Date(date);
       result.setFullYear(result.getFullYear() + years);
       return result;
     };
 
-    const isValidDate = (date) => !isNaN(date.getTime());
+    const isValidDate = (date: Date) => !isNaN(date.getTime());
 
     if (selectedRepeat === 'Daily') {
       for (let i = 1; i <= 365; i++) {
@@ -358,4 +358,5 @@ export const ReminderAdd = () => {
       <StatusBar style={isNight ? 'light' : 'dark'} />
     </View>
   );
-};
+}
+export default ReminderAdd; 

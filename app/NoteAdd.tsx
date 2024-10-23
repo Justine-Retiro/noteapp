@@ -1,15 +1,11 @@
 import { View, Text, TextInput, ScrollView, Platform } from 'react-native';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import HeadingAdd from '../../components/HeadingAdd';
+import HeadingAdd from '../components/HeadingAdd';
 import { BlurView } from 'expo-blur';
-import { saveUserData, loadUserData } from '../utils/userDataManager';
-import { useRoute } from '@react-navigation/native';
+import { saveUserData, loadUserData } from './utils/userDataManager';
 
-export const NoteDetail = ({ navigation }: { navigation: any }) => {
-  const route = useRoute();
-  const { id } = route.params as { id: string };
-
+export const NoteAdd = ({ navigation }: { navigation: any }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isTitleSet, setIsTitleSet] = useState(false);
@@ -42,44 +38,32 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
       if (!userData) {
         throw new Error('Failed to load user data');
       }
-  
-      const updatedNotes = userData.notes.map(note => 
-        note.id === id ? { ...note, title, description } : note
-      );
-  
+
+      const newNote = {
+        id: Date.now().toString(),
+        title,
+        description,
+        createdAt: new Date().toISOString(),
+      };
+
       const updatedUserData = {
         ...userData,
-        notes: updatedNotes,
+        notes: [...(userData.notes || []), newNote],
       };
-  
+
       await saveUserData(updatedUserData);
-      console.log('Note updated successfully');
+      console.log('Note saved successfully', newNote);
       
+      // Navigate back or to a different screen after saving
       navigation.reset({
         index: 0,
         routes: [{ name: 'Main' }],
       });
     } catch (error) {
-      console.error('Error updating note:', error);
+      console.error('Error saving note:', error);
+      // Handle error (e.g., show an error message to the user)
     }
   };
-
-  const loadNote = async () => {
-    try {
-      const userData = await loadUserData();
-      const note = userData.notes.find((note) => note.id === id);
-      if (note) {
-        setTitle(note.title);
-        setDescription(note.description);
-      }
-    } catch (error) {
-      console.error('Error loading note:', error);
-    }
-  };
-
-  useEffect(() => {
-    loadNote();
-  }, [id]);
 
   return (
     <View className={`w-screen h-screen ${isNight ? 'bg-[#0e1529]' : 'bg-[#F2F2F2]'}`}>
@@ -87,11 +71,10 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
         <BlurView
           intensity={0}
           tint="default"
-          className="overflow-hidden"
         >
           <View className="w-full -mt-2 pb-3.5 px-4 ">
             <HeadingAdd 
-              title="Edit Note"
+              title='New Note'
               onPress={handleSaveNote}
             />
           </View>
@@ -99,10 +82,10 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
       </View>
       <ScrollView>
         <View className="flex-1 items-center px-3">
-          <View className='w-full h-full mb-20'>
+          <View className='w-full h-auto mb-10'>
             <View className=''>
               <TextInput
-                className={`w-full h-auto p-1 font-bold text-[25px] 
+                className={`w-full h-[45px] py-1 px-1 font-bold text-[25px] 
                 ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' 
                 : 'text-black  border-b border-slate-100 focus:border-slate-700'}`}
                 placeholder='Title'
@@ -118,6 +101,7 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
                 className={`w-full h-auto p-1 font-regular text-[15px] rounded-lg 
                 ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' : 
                 'text-black border border-slate-100 focus:border-slate-700'}`}
+                placeholder='Note'
                 placeholderTextColor={isNight ? '#D3D7FF' : 'gray'}
                 value={description}
                 multiline={true}
@@ -132,4 +116,5 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
       <StatusBar style={isNight ? 'light' : 'dark'} />
     </View>
   );
-};
+}
+export default NoteAdd;
