@@ -213,10 +213,10 @@ export const Main = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View className="flex-1 items-center px-3 ">
+      <View className={`flex-1 items-center px-3 ${userData.notes.length >= 4 || userData.reminders.length >= 4 ? 'mb-32' : 'mb-32'}`}>
           {/* BG */}
           <View className="mt-16">
-            <View className='absolute bottom-0 left-0 right-0 -z-20 items-center'>
+            <View className='absolute bottom-0 left-0 right-0 -z-20 items-center '>
               <View className='absolute bottom-0 left-0 right-0 z-10 items-center'>
                 <Image
                   className={`w-screen ${new Date().getHours() >= 18 ? 'top-24 -z-10' : '-bottom-full'}`}
@@ -301,11 +301,11 @@ export const Main = () => {
             tint="default"
             className="overflow-hidden rounded-xl border border-white/20"
           >
-            <View className="flex-row items-center justify-end px-3 py-3">
-              {/* <View className="flex-row items-center"> */}
+            <View className="flex-row items-center justify-between px-3 py-3">
+              <View className="flex-row items-center">
                 {/* <Icon name={selectedFilter === 'Notes' ? 'note-text' : 'bell'} size={20} color="#FFFFFF" /> */}
-                {/* <Text className="text-white ml-2 text-lg">{selectedFilter === 'Notes' ? noteCount : reminderCount} {selectedFilter === 'Notes' ? 'Notes' : 'Reminders'}</Text> */}
-              {/* </View> */}
+                <Text className="text-white ml-2 text-lg">{selectedFilter === 'Notes' ? noteCount : reminderCount} {selectedFilter === 'Notes' ? 'Notes' : 'Reminders'}</Text>
+              </View>
               <ButtonMain
                 icon="add-circle" 
                 onPress={handleAddNavigation}

@@ -201,36 +201,17 @@ export const deleteReminder = async (id: string) => {
 // Reminder Notification Handler
 async function scheduleNotification(reminder: Reminder) {
   const triggerDate = new Date(reminder.dateTime);
-  let repeatInterval: Notifications.NotificationTriggerInput['repeats'] = false;
-
-  switch (reminder.frequency) {
-    case 'Daily':
-      repeatInterval = 'day';
-      break;
-    case 'Weekly':
-      repeatInterval = 'week';
-      break;
-    case 'Monthly':
-      repeatInterval = 'month';
-      break;
-    case 'Yearly':
-      repeatInterval = 'year';
-      break;
-  }
-
-  const triggerConfig: Notifications.NotificationTriggerInput = {
-    date: triggerDate,
-    repeats: !!repeatInterval,
-  };
 
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "Reminder",
       body: reminder.title,
-      sound: 'default', // Add sound
+      sound: 'default',
       data: { reminderId: reminder.id },
     },
-    trigger: triggerConfig,
+    trigger: {
+      date: triggerDate,
+    },
   });
 
   console.log('Notification scheduled for:', triggerDate);
