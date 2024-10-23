@@ -242,7 +242,7 @@ export const ReminderAdd = () => {
                     h-[105px] 
                     py-4 
                     px-4 
-                    text-[64px] 
+                    text-[54px] 
                     text-center 
                     rounded-lg 
                     ${isNight ? 'bg-[#1f2246] text-slate-100 focus:border-white' : 'focus:border border-[#8E97FD] text-slate-100'}
@@ -263,9 +263,10 @@ export const ReminderAdd = () => {
                       h-[105px] 
                       py-4 
                       px-4 
-                      text-[64px] 
-                      text-center 
+                      text-[54px] 
+                      text-center
                       rounded-lg 
+                      
                       ${isNight ? 'bg-[#1f2246] text-slate-100 focus:border-white' : 'focus:border border-[#8E97FD] text-slate-100'} 
                       ${inputMinutes !== '' ? 'bg-blue-400 border border-[#8E97FD]' : ''}
                       ${inputMinutes === '' && isNight ? 'border bg-transparent border-[#8E97FD]' : ''}

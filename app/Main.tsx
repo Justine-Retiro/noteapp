@@ -106,7 +106,7 @@ export const Main = () => {
 
   const handleAddNavigation = () => {
     if(selectedFilter === 'Notes') {
-      router.push('/NoteAdd');  // Use forward slash before route name
+      router.push('/NoteAdd'); 
     } else {
       router.push('/ReminderAdd');
     }

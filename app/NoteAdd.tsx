@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import HeadingAdd from '../components/HeadingAdd';
 import { BlurView } from 'expo-blur';
 import { saveUserData, loadUserData } from './utils/userDataManager';
+import { router } from 'expo-router'; // Import router
 
 export const NoteAdd = ({ navigation }: { navigation: any }) => {
   const [title, setTitle] = useState('');
@@ -54,11 +55,8 @@ export const NoteAdd = ({ navigation }: { navigation: any }) => {
       await saveUserData(updatedUserData);
       console.log('Note saved successfully', newNote);
       
-      // Navigate back or to a different screen after saving
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Main' }],
-      });
+      // Navigate back to the Main screen
+      router.push('/Main');
     } catch (error) {
       console.error('Error saving note:', error);
       // Handle error (e.g., show an error message to the user)
@@ -100,7 +98,7 @@ export const NoteAdd = ({ navigation }: { navigation: any }) => {
               <TextInput
                 className={`w-full h-auto p-1 font-regular text-[15px] rounded-lg 
                 ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' : 
-                'text-black border border-slate-100 focus:border-slate-700'}`}
+                'text-black border border-slate-100 focus:border-transparent'}`}
                 placeholder='Note'
                 placeholderTextColor={isNight ? '#D3D7FF' : 'gray'}
                 value={description}
