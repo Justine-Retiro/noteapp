@@ -28,7 +28,7 @@ const ReminderTabs: React.FC<ReminderTabsProps> = ({
     }
   };
 
-  const handleLongPress = (event) => {
+  const handleLongPress = (event: any) => {
     if (event.nativeEvent.state === State.ACTIVE) {
       Alert.alert(
         "Delete Reminder",
@@ -63,7 +63,7 @@ const ReminderTabs: React.FC<ReminderTabsProps> = ({
               />
               <View className='ml-2 flex-1'>
                 <View>
-                  <Text className={`font-bold text-lg ${new Date().getHours() >= 18 ? 'text-slate-100' : 'text-white'} ${isDone ? 'line-through' : ''}`}>{title}</Text>
+                  <Text className={`font-bold text-lg ${new Date().getHours() >= 18 ? 'text-slate-100' : 'text-slate-900'} ${isDone ? 'line-through' : ''}`}>{title}</Text>
                   {desc && <Text className={`font-regular text-sm ${new Date().getHours() >= 18 ? 'text-slate-300' : 'text-[#7C83A4]'} ${isDone ? 'line-through' : ''}`}>{desc}</Text>}
                   <Text className={`font-regular text-sm ${new Date().getHours() >= 18 ? 'text-slate-300' : 'text-[#7C83A4]'}`}>{formattedTime}</Text>  
                 </View>

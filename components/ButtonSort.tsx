@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const StyledTouchableOpacity = styled(TouchableOpacity);
 const StyledText = styled(Text);
 
-const ButtonSort = ({ filter, icon, onPress, isSelected }) => {
+const ButtonSort = ({ filter, icon, onPress, isSelected }: { filter: string, icon: string, onPress: () => void, isSelected: boolean }) => {
   return (
     <StyledTouchableOpacity
       className={`
