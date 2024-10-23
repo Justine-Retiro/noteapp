@@ -87,7 +87,7 @@ export const Main = () => {
   };
 
   const handleNotePress = (id: string) => {
-    router.push(`/NoteDetail/${id}`);
+    router.push({ pathname: '/NoteDetail', params: { id } });
   };
 
   const onRefresh = useCallback(async () => {
@@ -96,11 +96,11 @@ export const Main = () => {
     setRefreshing(false);
   }, []);
 
-  const handleDateSelect = (date) => {
+  const handleDateSelect = (date: any) => {
     setSelectedDate(date);
   };
 
-  const handleMonthChange = (month) => {
+  const handleMonthChange = (month: any) => {
     setSelectedDate(month);
   };
 
@@ -112,7 +112,7 @@ export const Main = () => {
     }
   } 
 
-  const handleReminderSelect = useCallback((id) => {
+  const handleReminderSelect = useCallback((id: any) => {
     setSelectedReminders((prev) => {
       const newState = { ...prev };
       if (newState[id]) {
@@ -125,7 +125,7 @@ export const Main = () => {
           try {
             await updateReminderStatus(id, 'done');
             setUserData(prevUserData => {
-              const updatedReminders = prevUserData.reminders.map(reminder => 
+              const updatedReminders = prevUserData.reminders.map((reminder: any) => 
                 reminder.id === id ? { ...reminder, status: 'done' } : reminder
               );
               return { ...prevUserData, reminders: updatedReminders };
@@ -188,7 +188,7 @@ export const Main = () => {
 
   const handleCustomRepeatSave = (startDate: Date, endDate: Date | null) => {
     console.log('Custom repeat set for:', startDate, 'to', endDate);
-    // Implement your logic to update the reminder with the new repeat dates
+    
     setShowCustomRepeatModal(false);
   };
 

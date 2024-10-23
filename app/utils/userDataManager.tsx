@@ -200,8 +200,8 @@ export const deleteReminder = async (id: string) => {
 // -----------------
 // Reminder Notification Handler
 async function scheduleNotification(reminder: Reminder) {
-  const trigger = new Date(reminder.dateTime);
-  let repeatInterval;
+  const triggerDate = new Date(reminder.dateTime);
+  let repeatInterval: Notifications.NotificationTriggerInput['repeats'] = false;
 
   switch (reminder.frequency) {
     case 'Daily':
@@ -216,47 +216,43 @@ async function scheduleNotification(reminder: Reminder) {
     case 'Yearly':
       repeatInterval = 'year';
       break;
-    default:
-      repeatInterval = null;
   }
 
-  const triggerConfig = repeatInterval
-    ? { repeats: true, hour: trigger.getHours(), minute: trigger.getMinutes(), interval: repeatInterval }
-    : { date: trigger };
+  const triggerConfig: Notifications.NotificationTriggerInput = {
+    date: triggerDate,
+    repeats: !!repeatInterval,
+  };
 
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "Reminder",
       body: reminder.title,
+      sound: 'default', // Add sound
       data: { reminderId: reminder.id },
     },
     trigger: triggerConfig,
-    identifier: reminder.id,
   });
-  console.log('Notification scheduled');
+
+  console.log('Notification scheduled for:', triggerDate);
 }
 
 export async function registerForPushNotificationsAsync() {
   let token;
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    console.log('Existing notification permission status:', existingStatus);
     let finalStatus = existingStatus;
     if (existingStatus !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
-      console.log('New notification permission status:', finalStatus);
     }
     if (finalStatus !== 'granted') {
       alert('Failed to get push token for push notification!');
-      console.log('Notification permission not granted');
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync({ projectId: EXPO_PROJECT_ID })).data;
     console.log('Push notification token:', token);
   } else {
     alert('Must use physical device for Push Notifications');
-    console.log('Not a physical device');
   }
 
   if (Platform.OS === 'android') {
@@ -293,11 +289,12 @@ export async function setupNotifications() {
 
   Notifications.addNotificationResponseReceivedListener(async (response) => {
     const reminderId = response.notification.request.content.data.reminderId as string;
-    await TaskManager.isTaskRegisteredAsync(REMINDER_TASK) || 
+    if (!(await TaskManager.isTaskRegisteredAsync(REMINDER_TASK))) {
       await TaskManager.registerTaskAsync(REMINDER_TASK, {
         data: { reminderId },
         taskName: REMINDER_TASK,
       });
+    }
   });
 }
 // -----------------

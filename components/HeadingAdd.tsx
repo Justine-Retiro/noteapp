@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-const HeadingAdd = ({ title, onPress } : { title: string, onPress: () => void }) => {
+const HeadingAdd = ({ title, state, onPress } : { title: string, state: any, onPress: () => void }) => {
     const navigation = useNavigation();
     
 
@@ -21,7 +21,7 @@ const HeadingAdd = ({ title, onPress } : { title: string, onPress: () => void })
         <TouchableOpacity 
           onPress={onPress}
           >
-          <Text className={`text-lg font-semibold ${new Date().getHours() >= 18 ? 'text-[#8E97FD]' : ' text-[#8E97FD]'}`}>Add</Text>
+          <Text className={`text-lg font-semibold ${new Date().getHours() >= 18 ? 'text-[#8E97FD]' : ' text-[#8E97FD]'}`}>{state ? 'Save' : 'Add'}</Text>
         </TouchableOpacity>
     </View>
   )

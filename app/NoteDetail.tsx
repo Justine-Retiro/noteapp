@@ -1,14 +1,16 @@
-import { View, Text, TextInput, ScrollView, Platform } from 'react-native';
+import { View, Text, TextInput, ScrollView, Platform, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import HeadingAdd from '../components/HeadingAdd';
 import { BlurView } from 'expo-blur';
 import { saveUserData, loadUserData } from './utils/userDataManager';
 import { useRoute } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 export const NoteDetail = ({ navigation }: { navigation: any }) => {
   const route = useRoute();
   const { id } = route.params as { id: string };
+  const router = useRouter();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -55,10 +57,7 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
       await saveUserData(updatedUserData);
       console.log('Note updated successfully');
       
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Main' }],
-      });
+      router.replace('/Main'); // Use router.replace to navigate
     } catch (error) {
       console.error('Error updating note:', error);
     }
@@ -92,6 +91,7 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
           <View className="w-full -mt-2 pb-3.5 px-4 ">
             <HeadingAdd 
               title="Edit Note"
+              state="Save"
               onPress={handleSaveNote}
             />
           </View>
@@ -113,18 +113,29 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
                 ref={titleInputRef}
               />
             </View>
-            <View className='mb-5 h-screen flex items-baseline'>
-              <TextInput
-                className={`w-full h-auto p-1 font-regular text-[15px] rounded-lg 
-                ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' : 
-                'text-black border border-slate-100 focus:border-slate-700'}`}
-                placeholderTextColor={isNight ? '#D3D7FF' : 'gray'}
-                value={description}
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={handleDescriptionChange}
-                ref={noteInputRef}
-              />
+            <View className='mb-5 h-screen  flex items-baseline'>
+              <Pressable style={{ flex: 1 }} onPress={() => {
+                console.log('Pressable pressed');
+                if (noteInputRef.current) {
+                  noteInputRef.current.focus();
+                }
+              }}>
+                <View style={{ flex: 1 }} className='w-screen'>
+                  <TextInput
+                    className={`w-full h-auto p-1 font-regular text-[15px] rounded-lg
+                    ${isNight ? 'text-white border-[#2b1ea5] focus:border-blue-600' : 
+                    'text-black border border-slate-100 '}`}
+                    placeholderTextColor={isNight ? '#D3D7FF' : 'gray'}
+                    value={description}
+                    multiline={true}
+                    numberOfLines={4}
+                    onChangeText={handleDescriptionChange}
+                    ref={noteInputRef}
+                    style={{ flex: 1 }}
+                    pointerEvents="none" // Ensure TextInput doesn't intercept touch events
+                  />
+                </View>
+              </Pressable>
             </View>
           </View>
         </View>
@@ -132,4 +143,5 @@ export const NoteDetail = ({ navigation }: { navigation: any }) => {
       <StatusBar style={isNight ? 'light' : 'dark'} />
     </View>
   );
-};
+}
+export default NoteDetail;
