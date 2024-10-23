@@ -1,6 +1,6 @@
 import { View, Text, Image, ScrollView, RefreshControl, AppState } from 'react-native';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { saveUserData, loadUserData, updateReminderStatus, repeatReminderDaily, deleteReminder } from './utils/userDataManager'; // Added deleteReminder import
+import { saveUserData, loadUserData, updateReminderStatus, repeatReminderDaily, deleteReminder, deleteNote } from './utils/userDataManager'; // Added deleteReminder import
 import { BlurView } from 'expo-blur';
 import { StatusBar } from 'expo-status-bar';
 import Greeting from '../components/Greeting';
@@ -201,6 +201,15 @@ export const Main = () => {
     }
   }, [loadStoredData]);
 
+  const handleNoteSelect = useCallback(async (id: string) => {
+    try {
+      await deleteNote(id);
+      await loadStoredData(); // Reload data to reflect changes
+    } catch (error) {
+      console.error('Error deleting note:', error);
+    }
+  }, [loadStoredData]);
+
   const noteCount = userData.notes ? userData.notes.length : 0; 
   const reminderCount = userData.reminders ? userData.reminders.length : 0;
 
@@ -257,6 +266,9 @@ export const Main = () => {
                 title={note.title}
                 description={note.description}
                 onPress={() => handleNotePress(note.id)}
+                onSelect={() => handleNoteSelect(note.id)}
+                onDelete={handleNoteSelect}
+                id={note.id}
               />
             ))
           )}

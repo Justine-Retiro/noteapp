@@ -197,6 +197,21 @@ export const deleteReminder = async (id: string) => {
   }
 };
 
+export const deleteNote = async (id: string) => {
+  try {
+    const userData = await loadUserData();
+    if (userData) {
+      const updatedNotes = userData.notes.filter(note => note.id !== id);
+      const updatedUserData = { ...userData, notes: updatedNotes };
+      await saveUserData(updatedUserData);
+      console.log(`Note ${id} deleted successfully`);
+    }
+  } catch (error) {
+    console.error('Error deleting note:', error);
+    throw error;
+  }
+}
+
 // -----------------
 // Reminder Notification Handler
 async function scheduleNotification(reminder: Reminder) {
@@ -240,6 +255,7 @@ export async function registerForPushNotificationsAsync() {
   let token;
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    console.log('Existing notification permission status:', existingStatus);
     let finalStatus = existingStatus;
     if (existingStatus !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync();
@@ -267,6 +283,8 @@ export async function registerForPushNotificationsAsync() {
   return token;
 }
 
+
+
 export async function setupNotifications() {
   await Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -283,17 +301,20 @@ export async function setupNotifications() {
     }
     if (data) {
       const { reminderId } = data as { reminderId: string };
+      console.log(`Task executed for reminderId: ${reminderId}`);
       await updateReminderStatus(reminderId, 'done');
     }
   });
 
   Notifications.addNotificationResponseReceivedListener(async (response) => {
     const reminderId = response.notification.request.content.data.reminderId as string;
+    console.log(`Notification response received for reminderId: ${reminderId}`);
     if (!(await TaskManager.isTaskRegisteredAsync(REMINDER_TASK))) {
       await TaskManager.registerTaskAsync(REMINDER_TASK, {
         data: { reminderId },
         taskName: REMINDER_TASK,
       });
+      console.log(`Task registered for reminderId: ${reminderId}`);
     }
   });
 }
