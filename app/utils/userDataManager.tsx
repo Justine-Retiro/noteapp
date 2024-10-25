@@ -109,6 +109,14 @@ export const loadUserData = async (): Promise<UserData | null> => {
   }
 };
 
+export const deleteNote = async (id: string) => {
+  const userData = await loadUserData();
+  if (userData) {
+    const updatedNotes = userData.notes.filter(note => note.id !== id);
+    await saveUserData({ ...userData, notes: updatedNotes });
+  }
+};
+
 // -----------------
 // Reminder
 export const addReminder = async (reminder: Omit<Reminder, 'id'>) => {
